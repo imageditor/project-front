@@ -120,7 +120,7 @@ export default class Project extends Component {
                         </form>
 
                         <button
-                            className="badge badge-danger mr-2"
+                            className="badge bg-danger mr-2"
                             onClick={this.deleteProject}
                         >
                             Delete
@@ -128,7 +128,7 @@ export default class Project extends Component {
 
                         <button
                             type="submit"
-                            className="badge badge-success"
+                            className="badge bg-success"
                             onClick={this.updateProject}
                         >
                             Update
