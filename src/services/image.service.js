@@ -1,6 +1,6 @@
 import { getHttpTransport } from "../http-common";
 
-const http = getHttpTransport('project')
+const http = getHttpTransport('image')
 
 class ProjectDataService {
     getAll() {
