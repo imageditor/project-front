@@ -2,34 +2,34 @@ import { getHttpTransport } from "../http-common";
 
 const http = getHttpTransport('image')
 
-class ProjectDataService {
+class ImageDataService {
     getAll() {
-        return http.get("/projects");
+        return http.get(`/images`);
     }
 
     get(id) {
-        return http.get(`/projects/${id}`);
+        return http.get(`/images/${id}`);
     }
 
     create(data) {
-        return http.post("/projects", data);
+        return http.post("/images", data);
     }
 
     update(id, data) {
-        return http.put(`/projects/${id}`, data);
+        return http.put(`/images/${id}`, data);
     }
 
     delete(id) {
-        return http.delete(`/projects/${id}`);
+        return http.delete(`/images/${id}`);
     }
 
     deleteAll() {
-        return http.delete(`/projects`);
+        return http.delete(`/images`);
     }
 
-    findByTitle(title) {
-        return http.get(`/projects?title=${title}`);
+    findByProjectId(projectId) {
+        return http.get(`/images?projectid=${projectId}`);
     }
 }
 
-export default new ProjectDataService();
+export default new ImageDataService();

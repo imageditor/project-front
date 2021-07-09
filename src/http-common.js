@@ -26,7 +26,7 @@ export const getHttpTransport = (service) => {
         baseUrl = `//${IM_SERVICE_HOST}:${IM_SERVICE_PORT}`
         break;
       default:
-        baseUrl = `localhost:8088`
+        baseUrl = `//localhost:8086`
         break;
     }
   }

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ProjectDataService from "../services/project.service";
+import ImagesList from "../components/images-list.component";
+
 import { Link } from "react-router-dom";
 
 export default class ProjectsList extends Component {
@@ -158,6 +160,7 @@ export default class ProjectsList extends Component {
                             >
                                 Edit
                             </Link>
+                            <ImagesList projectId={currentProject.id} />
                         </div>
                     ) : (
                         <div>

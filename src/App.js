@@ -8,6 +8,8 @@ import AddProject from "./components/add-project.component";
 import Project from "./components/project.component";
 import ProjectsList from "./components/projects-list.component";
 
+import ImagesList from "./components/images-list.component";
+
 class App extends Component {
     render() {
         return (
@@ -24,7 +26,12 @@ class App extends Component {
                         </li>
                         <li className="nav-item">
                             <Link to={"/add"} className="nav-link">
-                                Add
+                                Add Project
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to={"/images"} className="nav-link">
+                                Images
                             </Link>
                         </li>
                     </div>
@@ -33,6 +40,7 @@ class App extends Component {
                 <div className="container mt-3">
                     <Switch>
                         <Route exact path={["/", "/projects"]} component={ProjectsList} />
+                        <Route exact path={["/images"]} render={() => <ImagesList showAll />} />
                         <Route exact path="/add" component={AddProject} />
                         <Route path="/projects/:id" component={Project} />
                     </Switch>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ProjectDataService from "../services/project.service";
+import ImagesList from "../components/images-list.component";
 
 export default class Project extends Component {
     constructor(props) {
@@ -12,7 +13,7 @@ export default class Project extends Component {
 
         this.state = {
             currentProject: {
-                id: null,
+                id: this.props.match.params.id,
                 title: "",
                 description: ""
             },
@@ -52,7 +53,7 @@ export default class Project extends Component {
         ProjectDataService.get(id)
             .then(response => {
                 this.setState({
-                    currentProject: response.data
+                    currentProject: response.data,
                 });
                 console.log(response.data);
             })
@@ -90,6 +91,7 @@ export default class Project extends Component {
 
     render() {
         const { currentProject } = this.state;
+        const projectId = this.props.match.params.id;
 
         return (
             <div>
@@ -134,6 +136,9 @@ export default class Project extends Component {
                             Update
                         </button>
                         <p>{this.state.message}</p>
+                        <div>
+                            <ImagesList projectId={projectId} />
+                        </div>
                     </div>
                 ) : (
                     <div>
