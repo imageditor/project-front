@@ -1,0 +1,21 @@
+version: '3.4'
+
+networks:
+  imnetwork:
+    ipam:
+      config:
+       - subnet: 172.29.0.0/24
+
+services:
+  projectmanagerfrontend:
+    # image: projectmanagerfrontend
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    networks:
+      imnetwork:
+        ipv4_address: 172.29.0.11
+    ports:
+      - 3001:8089

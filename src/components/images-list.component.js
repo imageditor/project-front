@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import ImageDataService from "../services/image.service";
+import ProcessingImageDataService from '../services/processing.service'
 //import { Link } from "react-router-dom";
+
+
 
 export default class ImagesList extends Component {
     constructor(props) {
@@ -18,6 +21,35 @@ export default class ImagesList extends Component {
             projectId: null,
             //currentIndex: -1,
         }
+    }
+
+    handleFile(e) {
+        e.preventDefault();
+        // let dt = e.dataTransfer;
+        let files = e.target.files;
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let reader = new FileReader();
+            let fetchBody = {
+                projectId: 'placeholder',
+                processingType: 'upload',
+                image: new Blob([reader.result], { type: file.type })
+            };
+            console.log(fetchBody)
+            const successsCallback = (response) => {
+                if (response.ok) {
+                    console.log('Processing has been started')
+                } else {
+                    console.log('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+                }
+            }
+
+            reader.addEventListener('loadend', function (e) {
+                ProcessingImageDataService.startProcessing(fetchBody, successsCallback)
+            });
+            reader.readAsArrayBuffer(file);
+        }
+        return false;
     }
 
     componentDidMount() {
@@ -132,6 +164,9 @@ searchTitle() {
             <div className="list row">
                 <div className="col-md-6">
                     <h4>Images List {projectId} </h4>
+                    <div className="App">
+                        <input type="file" name="images" id="imgid" className="imgcls" onChange={this.handleFile} multiple />
+                    </div>
                     <ul className="list-group">
                         {
                             images.map((image, index) => (
