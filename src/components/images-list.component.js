@@ -13,6 +13,7 @@ export default class ImagesList extends Component {
         this.retrieveProjectImages = this.retrieveProjectImages.bind(this);
         this.getActualContent = this.getActualContent.bind(this);
         this.handleFile = this.handleFile.bind(this);
+        this.handleProcessing = this.handleProcessing.bind(this);
         //        this.handleCheckbox = this.handleCheckbox.bind(this);
         //        this.refreshList = this.refreshList.bind(this); //change-it
         //        this.setActiveProject = this.setActiveProject.bind(this); //change-it
@@ -78,35 +79,6 @@ export default class ImagesList extends Component {
             });
     }
 
-    /*
-refreshList() {
-    this.retrieveProjects();
-    this.setState({
-        currentProject: null,
-        currentIndex: -1
-    });
-}
- 
-setActiveProject(project, index) {
-    this.setState({
-        currentProject: project,
-        currentIndex: index
-    });
-}
- 
-removeAllProjects() {
-    ProjectDataService.deleteAll()
-        .then(response => {
-            console.log(response.data);
-            this.refreshList();
-        })
-        .catch(e => {
-            console.log(e);
-        });
-}
- 
-*/
-
     handleFile(e) {
         const { projectId } = this.state;
 
@@ -169,7 +141,6 @@ removeAllProjects() {
         return false;
     }
     */
-
     handleCheckbox = (e) => {
         const { name, checked } = e.target;
         console.log(`prevState`, this.state)
@@ -182,6 +153,33 @@ removeAllProjects() {
         // Это перенеси в цикл, который будет пробегать по выбранным картинкам и отправлять запросы в ВВ с 
         const bulkActionImgs = this.state.images.filter(img => img.checked)
 
+
+        console.log(`bulkActionImgs`, bulkActionImgs)
+    }
+
+    handleProcessing = (e) => {
+        const { type } = e.target
+        // Это перенеси в цикл, который будет пробегать по выбранным картинкам и отправлять запросы в ВВ с 
+        const bulkActionImgs = this.state.images.map(img => {
+            let result = null;
+            if (img.checked) {
+                result = {
+                    id: img.newFilename,
+                    projectId: img.projectId,
+                    processingType: type
+                }
+            }
+            return result
+        })
+        
+        bulkActionImgs.forEach(img => {
+            fetch(URL, {
+                method: 'POST',
+                body: img
+            })
+            .then()
+            .catch()
+        })
 
         console.log(`bulkActionImgs`, bulkActionImgs)
     }
@@ -220,7 +218,7 @@ removeAllProjects() {
                             ))}
                     </ul>
                     <div className="App">
-                        <button id="processing-btn" onChange={this.handleProcessing}>Grayscale it</button>
+                        <button id="processing-btn" type="grayscale" onClick={this.handleProcessing}>Grayscale it</button>
                     </div>
 
                 </div>
