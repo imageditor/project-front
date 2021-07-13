@@ -40,6 +40,5 @@ export const getHttpTransport = (service) => {
         headers: {
             "Content-type": contentType
         }
-
     });
 }

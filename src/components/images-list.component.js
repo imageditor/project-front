@@ -89,17 +89,18 @@ export default class ImagesList extends Component {
             let file = files[i];
             let bodyFormData = new FormData()
             console.log(file)
-            bodyFormData.append('projectID', projectId)
+
+            bodyFormData.append('projectId', projectId)
             bodyFormData.append('image', file)
 
-            let imageData = {
-                projectId: projectId,
-                parentImage: file.name
-            };
+            // let imageData = {
+            //     projectId: projectId,
+            //     parentImage: file.name
+            // };
 
             console.log(`Try post to ${projectId} ${file.name}`)
-            //            ImageDataService.imageUpload(bodyFormData)
-            ImageDataService.create(imageData)
+            ImageDataService.create(bodyFormData)
+            // ImageDataService.create(imageData)
                 .then(response => {
                     console.log(`it's ok: ${response}`)
                     this.getActualContent(projectId)
@@ -157,31 +158,28 @@ export default class ImagesList extends Component {
         console.log(`bulkActionImgs`, bulkActionImgs)
     }
 
-    handleProcessing = (e) => {
-        const { type } = e.target
-        // Это перенеси в цикл, который будет пробегать по выбранным картинкам и отправлять запросы в ВВ с 
-        const bulkActionImgs = this.state.images.map(img => {
+    handleProcessing = () => {
+        this.state.images.map(img => {
             let result = null;
             if (img.checked) {
                 result = {
                     id: img.newFilename,
                     projectId: img.projectId,
-                    processingType: type
+                    // different checkboxes send different types. Will be img.processingType
+                    processingType: "grayscale"
                 }
+                //case processingType
+                ImageDataService.transform(result)
+                    .then(response => {
+                        console.log(`send transform: ${result}`)
+                    })
+                    .catch(e => {
+                        console.log(`foooooo: ${e}`)
+                    })
+
             }
             return result
         })
-        
-        bulkActionImgs.forEach(img => {
-            fetch(URL, {
-                method: 'POST',
-                body: img
-            })
-            .then()
-            .catch()
-        })
-
-        console.log(`bulkActionImgs`, bulkActionImgs)
     }
 
     render() {
@@ -218,7 +216,7 @@ export default class ImagesList extends Component {
                             ))}
                     </ul>
                     <div className="App">
-                        <button id="processing-btn" type="grayscale" onClick={this.handleProcessing}>Grayscale it</button>
+                        <button id="processing-btn" onClick={this.handleProcessing}>Processing with selected</button>
                     </div>
 
                 </div>
