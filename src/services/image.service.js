@@ -32,8 +32,8 @@ class ImageDataService {
         return httpJson.get(`/images?projectid=${projectId}`);
     }
 
-    imageUpload(){
-        return httpFormData.post("/images", data);
+    imageUpload(data){
+        return httpFormData.post("/images/upload", data);
     }
 }
 
