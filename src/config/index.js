@@ -7,7 +7,9 @@ const config = {
     PM_SERVICE_HOST: "localhost",
     PM_SERVICE_PORT: 8088,
 
-    IM_SERVICE_HOST: "localhost",
-    IM_SERVICE_PORT: 8086,
+    IM_SERVICE_HOST: "im-lb-1172639476.us-west-2.elb.amazonaws.com",
+    IM_SERVICE_PORT: 80,
+
+    BUCKET_URI: "s3://iv-alex-oregon-bucket-war/ce1070c3938d6b6022b0d06e6cb87019/"
 }
 export default config

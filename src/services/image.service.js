@@ -13,7 +13,7 @@ class ImageDataService {
     }
 
     create(data) {
-        return httpJson.post("/images", data);
+        return httpFormData.post("/images/", data);
     }
 
     update(id, data) {

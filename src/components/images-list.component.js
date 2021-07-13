@@ -13,6 +13,7 @@ export default class ImagesList extends Component {
         this.retrieveProjectImages = this.retrieveProjectImages.bind(this);
         this.getActualContent = this.getActualContent.bind(this);
         this.handleFile = this.handleFile.bind(this);
+        //        this.handleCheckbox = this.handleCheckbox.bind(this);
         //        this.refreshList = this.refreshList.bind(this); //change-it
         //        this.setActiveProject = this.setActiveProject.bind(this); //change-it
         //        this.removeAllProjects = this.removeAllProjects.bind(this); //change-it
@@ -51,15 +52,6 @@ export default class ImagesList extends Component {
             this.retrieveAllImages();
     }
 
-    /*
-        onChangeSearchTitle(e) {
-            const searchTitle = e.target.value;
-    
-            this.setState({
-                searchTitle: searchTitle
-            });
-        }
-    */
     retrieveAllImages() {
         ImageDataService.getAll()
             .then(response => {
@@ -85,6 +77,7 @@ export default class ImagesList extends Component {
                 console.log(e);
             });
     }
+
     /*
 refreshList() {
     this.retrieveProjects();
@@ -112,24 +105,10 @@ removeAllProjects() {
         });
 }
  
-searchTitle() {
-    ProjectDataService.findByTitle(this.state.searchTitle)
-        .then(response => {
-            this.setState({
-                projects: response.data
-            });
-            console.log(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        });
-}
 */
 
     handleFile(e) {
-        const {
-            projectId
-        } = this.state;
+        const { projectId } = this.state;
 
         e.preventDefault();
         // let dt = e.dataTransfer;
@@ -137,9 +116,9 @@ searchTitle() {
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
             let bodyFormData = new FormData()
-
+            console.log(file)
             bodyFormData.append('projectID', projectId)
-            bodyFormData.append('file', file)
+            bodyFormData.append('image', file)
 
             let imageData = {
                 projectId: projectId,
@@ -147,13 +126,14 @@ searchTitle() {
             };
 
             console.log(`Try post to ${projectId} ${file.name}`)
-//            ImageDataService.imageUpload(bodyFormData)
+            //            ImageDataService.imageUpload(bodyFormData)
             ImageDataService.create(imageData)
                 .then(response => {
-                    console.log(`it's ok: ${response}`);
+                    console.log(`it's ok: ${response}`)
+                    this.getActualContent(projectId)
                 })
                 .catch(e => {
-                    console.log(`foooooo: ${e}`);
+                    console.log(`foooooo: ${e}`)
                 })
         }
 
@@ -190,7 +170,21 @@ searchTitle() {
     }
     */
 
+    handleCheckbox = (e) => {
+        const { name, checked } = e.target;
+        console.log(`prevState`, this.state)
+        const newImagesState = [...this.state.images];
 
+        newImagesState[name].checked = checked;
+
+        this.setState(newImagesState);
+
+        // Это перенеси в цикл, который будет пробегать по выбранным картинкам и отправлять запросы в ВВ с 
+        const bulkActionImgs = this.state.images.filter(img => img.checked)
+
+
+        console.log(`bulkActionImgs`, bulkActionImgs)
+    }
 
     render() {
 
@@ -198,6 +192,7 @@ searchTitle() {
             images,
             projectId
         } = this.state;
+        const imagesListName = "imagesList"
 
         return (
             <div className="list row">
@@ -206,18 +201,27 @@ searchTitle() {
                     <div className="App">
                         <input type="file" name="images" id="imgid" className="imgcls" onChange={this.handleFile} multiple />
                     </div>
-                    <ul className="list-group">
+                    <ul className="list-group" name={imagesListName}>
                         {
                             images.map((image, index) => (
-                                <li
-                                    className={"list-group-item"}
-                                    //                                    onClick={() => this.setActiveProject(project, index)}
-                                    key={index}
-                                >
-                                    {image.id}
+                                <li className="list-group-item" key={index}>
+                                    <span>File name: </span>{image.newFilename}<br />
+                                    <span>Status: </span>{image.status}<br />
+                                    <span>Transformation: </span>{image.transformation}<br />
+                                    <span>Created: </span>{image.createdAt}<br />
+                                    <input
+                                        type="checkbox"
+                                        onChange={this.handleCheckbox}
+                                        name={index}
+                                        value={image.checked}
+                                        checked={image.checked}
+                                    /> Grayscale it
                                 </li>
                             ))}
                     </ul>
+                    <div className="App">
+                        <button id="processing-btn" onChange={this.handleProcessing}>Grayscale it</button>
+                    </div>
 
                 </div>
             </div>
