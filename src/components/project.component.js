@@ -95,7 +95,7 @@ export default class Project extends Component {
 
         return (
             <div>
-                {currentProject ? (
+                { currentProject ? (
                     <div className="edit-form">
                         <h4>Project</h4>
                         <form>
